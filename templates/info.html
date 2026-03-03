@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AwetosClient | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="loaded">
+    <canvas id="particles"></canvas>
+    <div class="bg-glow"></div>
+
+    <nav class="nav-scrolled">
+        <a href="{{ url_for('index') }}" class="logo">AwetosClient</a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> <span data-i18n="nav_home">Home</span></a>
+            </li>
+            <li><a href="{{ url_for('buy') }}"><i class="fas fa-tag"></i> <span data-i18n="nav_buy">Buy</span></a></li>
+            <li><a href="{{ url_for('information') }}" style="color: var(--primary);"><i class="fas fa-user-shield"></i>
+                    <span data-i18n="nav_info">Information</span></a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="nav-right">
+            <span class="profile-name">{{ session.user }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-auth btn-auth-ghost" data-i18n="nav_logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="hero" style="min-height: 100vh; height: auto; padding-top: 8rem;">
+        <div class="section-title animate-fade">
+            <h1 style="font-size: 3.5rem;">DASHBOARD</h1>
+            <p style="color: var(--text-dim);">Your personal security and subscription overview.</p>
+        </div>
+
+        <div class="animate-fade"
+            style="max-width: 850px; width: 100%; background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 3rem;">
+
+            {% if success %}
+            <div
+                style="background: rgba(0, 255, 100, 0.1); border-left: 4px solid #00ff64; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; color: #00ff64;">
+                <i class="fas fa-check-circle"></i> {{ success }}
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div
+                style="background: rgba(255, 50, 50, 0.1); border-left: 4px solid #ff3232; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; color: #ff3232;">
+                <i class="fas fa-exclamation-triangle"></i> {{ error }}
+            </div>
+            {% endif %}
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800;">Welcome back, {{ session.user }}</h2>
+                {% if is_subscribed %}
+                <span class="status-badge"
+                    style="background: rgba(0, 255, 100, 0.1); color: #00ff64; border: 1px solid rgba(0, 255, 100, 0.2);">
+                    <i class="fas fa-check-circle"></i> Subscription Active
+                </span>
+                {% else %}
+                <span class="status-badge"
+                    style="background: rgba(255, 50, 50, 0.1); color: #ff3232; border: 1px solid rgba(255, 50, 50, 0.2);">
+                    <i class="fas fa-times-circle"></i> Subscription Expired
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label><i class="fas fa-fingerprint"></i> UID</label>
+                    <span class="value">#{{ user.uid }}</span>
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-microchip"></i> HWID</label>
+                    <span class="value">
+                        {{ user.hwid }}
+                        <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ user.hwid }}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-clock"></i> Subscription Ends</label>
+                    <span class="value" style="color: #ffaa00;">{{ user.expiry_date }}</span>
+                    <div class="sub-progress">
+                        <div class="sub-progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-history"></i> Registered</label>
+                    <span class="value">{{ user.registered_at }}</span>
+                </div>
+            </div>
+
+            {% if is_subscribed %}
+            <div style="margin: 2rem 0; text-align: center;">
+                <a href="{{ loader_url }}" class="btn-main"
+                    style="display: inline-block; width: 100%; text-decoration: none; background: var(--primary); color: black; font-weight: 800; padding: 1rem; border-radius: 12px; box-shadow: 0 0 20px var(--primary-glow);">
+                    <i class="fas fa-download"></i> DOWNLOAD PREMIUM LOADER
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="special-offer">
+                <h4><i class="fas fa-key" style="color: var(--primary);"></i> Redeem Key</h4>
+                <p style="margin-bottom: 1rem;">Enter a generated 3-month trial key below to add time to your
+                    subscription.</p>
+                <form action="{{ url_for('redeem_key') }}" method="POST" style="display: flex; gap: 1rem;">
+                    <input type="text" name="key" placeholder="AWETOS-XXXXXX-90D" required
+                        style="flex: 1; padding: 0.8rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-family: monospace; font-size: 1.1rem; outline: none;">
+                    <button type="submit" class="submit-btn" style="padding: 0.8rem 1.5rem;">Activate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AwetosClient Project. User security is our top priority.</p>
+    </footer>
+
+    <div class="settings-panel">
+        <button id="theme-btn">🌙 Dark</button>
+        <button id="lang-btn">🇬🇧 EN</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
