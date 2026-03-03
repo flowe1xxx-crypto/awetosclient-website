@@ -1,195 +1,215 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Night DLC | Loader</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>AwetosClient | Loader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='loader/css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Special overrides for loader window */
-        body {
-            overflow: hidden;
-            height: 100vh;
-            background: transparent;
-        }
-
-        .loader-window {
-            height: 100vh;
-            width: 100vw;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--glass-border);
-        }
-
-        .loader-header {
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            -webkit-app-region: drag;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        .status-bar {
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid var(--glass-border);
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 0%;
-            transition: 0.3s;
-            box-shadow: 0 0 10px var(--primary-glow);
-        }
-    </style>
 </head>
 
 <body>
-    <div class="loader-window">
-        <header class="loader-header">
-            <div style="font-weight: 900; letter-spacing: 1px;">NIGHT <span style="color: var(--primary);">DLC</span>
-            </div>
-            <div style="display: flex; gap: 15px; -webkit-app-region: no-drag;">
-                <div class="nav-btn-icon" onclick="window.parent.postMessage({type: 'close'}, '*')"><i
-                        class="fas fa-times"></i></div>
-            </div>
-        </header>
+    <div class="bg-glow"></div>
+    <canvas id="particles"></canvas>
 
-        <main class="main-content">
-            <!-- Login State -->
-            <div id="login-view" style="display: none;">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h2 style="font-size: 1.2rem; margin-bottom: 5px;">АВТОРИЗАЦИЯ</h2>
-                    <p style="font-size: 0.75rem; color: var(--text-dim);">Войдите в свой аккаунт Night DLC</p>
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <div class="input-wrapper">
+    <header class="window-header">
+        <div class="window-title drag-region">
+            AWETOSCLIENT <span class="v-tag">LOADER</span>
+        </div>
+        <div class="window-controls no-drag">
+            <button class="control-btn" id="theme-toggle"><i class="fas fa-sun"></i></button>
+            <button class="control-btn close" onclick="window.parent.postMessage({type: 'close'}, '*')"><i class="fas fa-xmark"></i></button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar drag-region" id="sidebar-main" style="opacity: 0.3; pointer-events: none;">
+            <div class="nav-group no-drag">
+                <button class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')"><i class="fas fa-grid-2"></i></button>
+                <button class="nav-item" id="nav-settings" onclick="showPage('settings')"><i class="fas fa-sliders"></i></button>
+                <button class="nav-item" id="nav-logs" onclick="showPage('logs')"><i class="fas fa-terminal"></i></button>
+                <button class="nav-item" id="nav-updates" onclick="showPage('updates')"><i class="fas fa-rotate"></i></button>
+            </div>
+            <div class="nav-group no-drag">
+                <button class="nav-item" id="nav-login" onclick="showPage('login')"><i class="fas fa-user"></i></button>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <section class="page active" id="page-login">
+                <div class="auth-section glass">
+                    <div class="auth-header">
+                        <h1>AwetosClient</h1>
+                        <p>Авторизация для доступа к лаунчеру</p>
+                    </div>
+                    <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="text" id="username" placeholder="Email / Username">
+                        <input type="text" id="login-user" placeholder="Email / Username">
                     </div>
-                </div>
-                <div class="input-group">
-                    <label>Пароль</label>
-                    <div class="input-wrapper">
+                    <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Password">
+                        <input type="password" id="login-pass" placeholder="Пароль">
                     </div>
+                    <div class="captcha-row">
+                        <div class="captcha-chip" id="captcha-question"></div>
+                        <input type="text" id="captcha-answer" placeholder="Ответ">
+                    </div>
+                    <div class="auth-actions">
+                        <label class="remember-box"><input type="checkbox"> Запомнить меня</label>
+                        <a class="auth-link" href="#">Забыли пароль?</a>
+                    </div>
+                    <button class="btn-glow-primary" id="login-btn" onclick="handleLogin()">
+                        Войти
+                    </button>
+                    <div id="login-error" class="auth-error"></div>
                 </div>
-                <button class="btn-submit" onclick="handleLogin()" style="margin-top: 20px;">
-                    <i class="fas fa-sign-in-alt"></i> ВОЙТИ
-                </button>
-            </div>
+            </section>
 
-            <!-- Dashboard State -->
-            <div id="dashboard-view">
-                <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 30px;">
-                    <div class="avatar-large" style="width: 50px; height: 50px; font-size: 1rem;">N</div>
+            <section class="page" id="page-dashboard">
+                <div class="dashboard-header glass">
+                    <div class="avatar" id="avatar-letter">A</div>
                     <div>
-                        <h3 id="user-display">Welcome Back</h3>
-                        <p id="subscription-status" style="font-size: 0.7rem; color: var(--primary);">Loading session...
-                        </p>
+                        <div class="dash-title">Добро пожаловать, <span id="dash-username">User</span></div>
+                        <div class="dash-sub">Статус: <span id="license-type">PREMIUM</span></div>
                     </div>
-                    <button class="btn-profile glass" onclick="showAccountModal()"
-                        style="margin-left: auto; padding: 10px 15px;">
-                        <i class="fas fa-info-circle"></i> Инфо
-                    </button>
+                    <button class="btn-glow-primary" onclick="showAccountModal()">Аккаунт</button>
                 </div>
 
-                <div class="glass" style="padding: 20px; border-radius: 16px; margin-bottom: 25px;">
-                    <h4 style="font-size: 0.8rem; margin-bottom: 15px; color: var(--text-dim);">LAST NEWS</h4>
-                    <p style="font-size: 0.85rem; line-height: 1.5;">Night DLC v2.0 Released. Added new bypasses and
-                        optimized renderer for better performance on weak PCs.</p>
+                <div class="dashboard-grid">
+                    <div class="glass card-block">
+                        <div class="card-title">Игры</div>
+                        <div class="game-list">
+                            <div class="game-card active">
+                                <div class="game-name">Minecraft</div>
+                                <div class="game-meta">1.21.4 • Fabric</div>
+                            </div>
+                            <div class="game-card">
+                                <div class="game-name">Coming Soon</div>
+                                <div class="game-meta">Beta</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass card-block">
+                        <div class="card-title">Статус чита</div>
+                        <div class="stat-row">
+                            <span>Модуль</span><strong>Online</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Инжект</span><strong id="inject-status">Idle</strong>
+                        </div>
+                        <div class="action-row">
+                            <button class="btn-glow-primary" id="launch-btn" onclick="handleLaunch()">Inject</button>
+                            <button class="btn-secondary" onclick="showPage('settings')">Settings</button>
+                            <button class="btn-secondary" onclick="showPage('updates')">Update</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div style="display: flex; gap: 15px;">
-                    <div style="flex: 1;">
-                        <label
-                            style="font-size: 0.65rem; color: var(--text-dim); display: block; margin-bottom: 5px;">MEMORY
-                            (RAM)</label>
-                        <select id="ram-select" class="activate-input"
-                            style="width: 100%; border-radius: 8px; padding: 10px;">
-                            <option value="2048">2 GB</option>
-                            <option value="4096" selected>4 GB</option>
-                            <option value="6144">6 GB</option>
-                            <option value="8192">8 GB</option>
-                        </select>
+                <div class="glass card-block">
+                    <div class="card-title">Прогресс загрузки</div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="download-progress"></div>
                     </div>
-                    <button class="btn-submit" onclick="handleLaunch()" style="flex: 1.5;">
-                        <i class="fas fa-play"></i> ЗАПУСТИТЬ
-                    </button>
+                    <div class="progress-meta">
+                        <span id="download-status">Готово к загрузке</span>
+                        <span id="download-percent">0%</span>
+                    </div>
+                    <div class="progress-stats">
+                        <div>Скорость: <strong id="download-speed">0 MB/s</strong></div>
+                        <div>Осталось: <strong id="download-eta">—</strong></div>
+                        <button class="btn-danger" onclick="cancelDownload()">Отмена</button>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <section class="page" id="page-settings">
+                <div class="glass card-block">
+                    <div class="card-title">Настройки</div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span>Выделение RAM</span>
+                            <p>Использовать 2–8 GB</p>
+                        </div>
+                        <input type="range" class="range-accent" min="2048" max="8192" step="512" value="4096" id="setting-ram" oninput="updateRamLabel(this.value)">
+                        <div class="range-val" id="ram-val">4096 MB</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span>Повторы загрузки</span>
+                            <p>Сколько раз повторять при обрыве</p>
+                        </div>
+                        <input type="number" id="setting-retries" min="1" max="20" value="6">
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span>Интервал повтора (сек)</span>
+                            <p>Базовая задержка между попытками</p>
+                        </div>
+                        <input type="number" id="setting-retry-delay" min="0.2" step="0.1" value="2.5">
+                    </div>
+                    <div class="setting-actions">
+                        <button class="btn-secondary" onclick="exportConfig()">Экспорт</button>
+                        <button class="btn-secondary" onclick="importConfig()">Импорт</button>
+                        <input type="file" id="config-file" style="display:none" />
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="page-logs">
+                <div class="glass card-block">
+                    <div class="card-title">Логи</div>
+                    <div class="log-controls">
+                        <input type="text" id="log-filter" placeholder="Фильтр" oninput="filterLogs()">
+                        <button class="btn-secondary" onclick="exportLogs()">Экспорт</button>
+                    </div>
+                    <div class="log-console" id="log-console"></div>
+                </div>
+            </section>
+
+            <section class="page" id="page-updates">
+                <div class="glass card-block">
+                    <div class="card-title">Обновления</div>
+                    <div class="update-row">
+                        <div>
+                            <div>Версия лоадера</div>
+                            <strong id="loader-version">v1.2.1</strong>
+                        </div>
+                        <button class="btn-glow-primary" onclick="checkUpdates()">Проверить</button>
+                    </div>
+                    <div class="update-log" id="update-changelog-page">Обновлений не найдено.</div>
+                </div>
+            </section>
         </main>
-
-        <footer class="status-bar">
-            <span id="status-text">Ready to launch</span>
-            <span id="version-text">v1.2.1-DLC</span>
-            <div class="progress-container">
-                <div class="progress-bar" id="main-progress"></div>
-            </div>
-        </footer>
     </div>
 
-    <!-- Account Modal -->
-    <div id="account-modal"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
-        <div class="glass"
-            style="width: 100%; max-width: 400px; padding: 30px; border-radius: 20px; position: relative;">
-            <div style="position: absolute; top: 15px; right: 20px; cursor: pointer;" onclick="hideAccountModal()"><i
-                    class="fas fa-times"></i></div>
-            <h3 style="margin-bottom: 25px;">ACCOUNT DETAILS</h3>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                    <span style="color: var(--text-dim);">USERNAME</span>
-                    <span id="modal-user">-</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                    <span style="color: var(--text-dim);">UID</span>
-                    <span id="modal-uid">-</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                    <span style="color: var(--text-dim);">EXPIRY</span>
-                    <span id="modal-expiry">-</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                    <span style="color: var(--text-dim);">HWID</span>
-                    <span id="modal-hwid" style="font-family: monospace; font-size: 0.7rem;">-</span>
-                </div>
+    <div class="account-modal-overlay" id="account-modal">
+        <div class="account-modal">
+            <button class="control-btn close" onclick="hideAccountModal()"><i class="fas fa-xmark"></i></button>
+            <h3>Профиль</h3>
+            <div class="account-list">
+                <div><span>Username</span><strong id="account-username">—</strong></div>
+                <div><span>UID</span><strong id="account-uid">—</strong></div>
+                <div><span>Expiry</span><strong id="account-expiry">—</strong></div>
+                <div><span>HWID</span><strong id="account-hwid">—</strong></div>
+                <div><span>Registered</span><strong id="account-registered">—</strong></div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Use the existing logic from static/loader/js/script.js but adapted if needed
-        // For simplicity and speed, I'll assume the script.js handles the logic
-        // but I'll add a check to make sure the views switch correctly.
-    </script>
+    <div class="modal-overlay" id="update-modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <i class="fas fa-cloud-arrow-down pulse-accent"></i>
+                <h3>Обновление доступно</h3>
+                <p id="update-version">v0.0.0</p>
+            </div>
+            <p id="update-changelog-modal"></p>
+            <button class="btn-glow-primary" onclick="startUpdate()">UPDATE NOW</button>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='loader/js/script.js') }}"></script>
 </body>
 

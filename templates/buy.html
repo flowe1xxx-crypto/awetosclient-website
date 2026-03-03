@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Night DLC | Продукты</title>
+    <title>AwetosClient | Продукты</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -20,7 +20,7 @@
 
     <nav class="nav-centered">
         <div class="nav-container glass">
-            <a href="{{ url_for('index') }}" class="nav-logo">Night DLC</a>
+            <a href="{{ url_for('index') }}" class="nav-logo">AwetosClient</a>
             <div class="nav-items">
                 <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Главная</a>
                 <a href="{{ url_for('buy') }}" class="active"><i class="fas fa-shopping-bag"></i> Продукты</a>
@@ -28,8 +28,8 @@
                 <a href="{{ url_for('terms') }}"><i class="fas fa-gavel"></i> Условия использования</a>
             </div>
             <div class="nav-right">
-                <div class="nav-btn-icon"><i class="fas fa-moon"></i></div>
-                <div class="nav-btn-icon" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
+                <div class="nav-btn-icon" id="theme-btn"><i class="fas fa-moon"></i></div>
+                <div class="nav-btn-icon" id="lang-btn" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
                         class="fas fa-chevron-down" style="font-size: 0.5rem;"></i></div>
                 {% if is_logged_in %}
                 <a href="{{ url_for('information') }}" class="btn-profile glass"><i class="fas fa-user-circle"></i>
@@ -114,6 +114,7 @@
     </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>

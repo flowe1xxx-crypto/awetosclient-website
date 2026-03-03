@@ -26,6 +26,8 @@ window.addEventListener('message', (event) => {
         delete callbacks[callId];
     } else if (type === 'update_download_progress') {
         update_download_progress(data);
+    } else if (type === 'update_download_stats') {
+        update_download_stats(data);
     } else if (type === 'update_status') {
         update_status(data);
     } else if (type === 'launch_failed') {
@@ -54,9 +56,14 @@ async function handleLogin() {
     const pass = document.getElementById('login-pass').value;
     const errorEl = document.getElementById('login-error');
     const btn = document.getElementById('login-btn');
+    const captchaAnswer = document.getElementById('captcha-answer').value;
 
     if (!user || !pass) {
         errorEl.innerText = "CREDENTIALS REQUIRED";
+        return;
+    }
+    if (!validateCaptcha(captchaAnswer)) {
+        errorEl.innerText = "CAPTCHA FAILED";
         return;
     }
 
@@ -98,24 +105,22 @@ function updateUI() {
 
 async function handleLaunch() {
     const btn = document.getElementById('launch-btn');
-    const primary = btn.querySelector('.main-txt');
-    const secondary = btn.querySelector('.sub-txt');
 
     btn.disabled = true;
-    primary.innerText = "LAUNCHING...";
-    secondary.innerText = "PREPARING MODULES";
+    btn.innerText = "LAUNCHING...";
+    update_status("Preparing modules");
 
     const ram = document.getElementById('setting-ram').value;
     const result = await callPython('launch_game', { ram: parseInt(ram) });
 
     if (result.success) {
-        primary.innerText = "GAME RUNNING";
-        secondary.innerText = "PROTECTED BY AWETOSGUARD";
+        btn.innerText = "RUNNING";
+        update_status("Protected by AwetosGuard");
     } else {
         alert("Launch Failed: " + result.message);
         btn.disabled = false;
-        primary.innerText = "LAUNCH GAME";
-        secondary.innerText = "BUILD v1.21.4-STABLE";
+        btn.innerText = "Inject";
+        update_status("Build v1.21.4-stable");
     }
 }
 
@@ -124,28 +129,61 @@ function updateRamLabel(val) {
 }
 
 function update_download_progress(percent) {
-    const sub = document.getElementById('launch-btn').querySelector('.sub-txt');
-    if (sub) sub.innerText = `DOWNLOADING: ${percent}%`;
+    const percentEl = document.getElementById('download-percent');
+    const bar = document.getElementById('download-progress');
+    if (percentEl) percentEl.innerText = `${percent}%`;
+    if (bar) bar.style.width = `${percent}%`;
 }
 
 function update_status(text) {
-    const btn = document.getElementById('launch-btn');
-    const sub = btn.querySelector('.sub-txt');
-    if (sub) sub.innerText = text.toUpperCase();
+    const status = document.getElementById('download-status');
+    if (status) status.innerText = text;
+    addLog(text);
 }
 
 function launch_failed(err) {
     const btn = document.getElementById('launch-btn');
-    const primary = btn.querySelector('.main-txt');
-    const sub = btn.querySelector('.sub-txt');
 
     btn.disabled = false;
-    primary.innerText = "LAUNCH GAME";
-    sub.innerText = "ERROR: " + err.substring(0, 40);
+    btn.innerText = "Inject";
+    update_status("ERROR: " + err.substring(0, 40));
 
     setTimeout(() => {
-        sub.innerText = "BUILD v1.21.4-STABLE";
+        update_status("Build v1.21.4-stable");
     }, 5000);
+}
+
+function update_download_stats(stats) {
+    if (!stats) return;
+    const speedEl = document.getElementById('download-speed');
+    const etaEl = document.getElementById('download-eta');
+    const statusEl = document.getElementById('download-status');
+    const percentEl = document.getElementById('download-percent');
+    const bar = document.getElementById('download-progress');
+
+    const speed = stats.speed || 0;
+    const speedMb = (speed / (1024 * 1024)).toFixed(2);
+    if (speedEl) speedEl.innerText = `${speedMb} MB/s`;
+
+    if (stats.total && stats.total > 0) {
+        const percent = Math.floor((stats.downloaded / stats.total) * 100);
+        if (percentEl) percentEl.innerText = `${percent}%`;
+        if (bar) bar.style.width = `${percent}%`;
+    }
+
+    if (etaEl) {
+        if (stats.eta && stats.eta > 0) {
+            const min = Math.floor(stats.eta / 60);
+            const sec = stats.eta % 60;
+            etaEl.innerText = `${min}m ${sec}s`;
+        } else {
+            etaEl.innerText = "—";
+        }
+    }
+
+    if (statusEl && stats.resumed) {
+        statusEl.innerText = `Возобновление: ${stats.label}`;
+    }
 }
 
 // ========== Account Modal ==========
@@ -197,6 +235,8 @@ async function checkUpdates() {
         if (result && result.update_available) {
             updateInfo = result;
             showUpdateModal(result);
+            const pageLog = document.getElementById('update-changelog-page');
+            if (pageLog) pageLog.innerText = result.changelog || "Есть обновление";
         }
     } catch (e) {
         console.error("Update check failed", e);
@@ -205,7 +245,7 @@ async function checkUpdates() {
 
 function showUpdateModal(data) {
     document.getElementById('update-version').innerText = `v${data.version}`;
-    document.getElementById('update-changelog').innerText = data.changelog;
+    document.getElementById('update-changelog-modal').innerText = data.changelog;
     document.getElementById('update-modal').classList.add('active');
 }
 
@@ -227,6 +267,144 @@ async function startUpdate() {
         btn.innerText = "UPDATE NOW";
     }
 }
+
+async function cancelDownload() {
+    try {
+        await callPython('cancel_download');
+        update_status("Загрузка отменена");
+    } catch (e) {
+        update_status("Ошибка отмены");
+    }
+}
+
+function exportConfig() {
+    const ram = document.getElementById('setting-ram').value;
+    const data = JSON.stringify({ ram }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'awetos_config.json';
+    link.click();
+}
+
+function importConfig() {
+    const input = document.getElementById('config-file');
+    input.onchange = () => {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const cfg = JSON.parse(reader.result);
+                if (cfg.ram) {
+                    document.getElementById('setting-ram').value = cfg.ram;
+                    updateRamLabel(cfg.ram);
+                }
+            } catch (e) {
+                update_status("Неверный файл конфигурации");
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function filterLogs() {
+    const val = document.getElementById('log-filter').value.toLowerCase();
+    const entries = document.querySelectorAll('.log-line');
+    entries.forEach((line) => {
+        line.style.display = line.innerText.toLowerCase().includes(val) ? 'block' : 'none';
+    });
+}
+
+function exportLogs() {
+    const lines = Array.from(document.querySelectorAll('.log-line')).map((l) => l.innerText).join("\n");
+    const blob = new Blob([lines], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'awetos_logs.txt';
+    link.click();
+}
+
+function addLog(text) {
+    const consoleEl = document.getElementById('log-console');
+    if (!consoleEl || !text) return;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
+    consoleEl.appendChild(line);
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+function initCaptcha() {
+    const a = Math.floor(Math.random() * 8) + 1;
+    const b = Math.floor(Math.random() * 8) + 1;
+    const question = `${a} + ${b} = ?`;
+    const el = document.getElementById('captcha-question');
+    el.dataset.answer = String(a + b);
+    el.innerText = question;
+}
+
+function validateCaptcha(answer) {
+    const el = document.getElementById('captcha-question');
+    return el && answer && answer.trim() === el.dataset.answer;
+}
+
+function initThemeToggle() {
+    const btn = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('awetos_theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    btn.innerHTML = saved === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    btn.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('awetos_theme', next);
+        btn.innerHTML = next === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    });
+}
+
+async function applyDownloadSettings() {
+    const retriesEl = document.getElementById('setting-retries');
+    const delayEl = document.getElementById('setting-retry-delay');
+    if (!retriesEl || !delayEl) return;
+
+    const savedRetries = localStorage.getItem('awetos_dl_retries');
+    const savedDelay = localStorage.getItem('awetos_dl_delay');
+
+    if (savedRetries) retriesEl.value = savedRetries;
+    if (savedDelay) delayEl.value = savedDelay;
+
+    const maxRetries = parseInt(retriesEl.value || '6', 10);
+    const retryDelaySeconds = parseFloat(delayEl.value || '2.5');
+
+    try {
+        await callPython('set_download_settings', { max_retries: maxRetries, retry_delay_seconds: retryDelaySeconds });
+    } catch (e) {
+        addLog("Failed to apply download settings");
+    }
+
+    const saveAndApply = async () => {
+        localStorage.setItem('awetos_dl_retries', retriesEl.value);
+        localStorage.setItem('awetos_dl_delay', delayEl.value);
+        await applyDownloadSettings();
+    };
+
+    retriesEl.addEventListener('change', saveAndApply);
+    delayEl.addEventListener('change', saveAndApply);
+}
+
+function initLoaderUI() {
+    initParticles();
+    initCaptcha();
+    initThemeToggle();
+    updateRamLabel(document.getElementById('setting-ram').value);
+    applyDownloadSettings();
+    checkUpdates();
+    window.parent.postMessage({ type: 'ui_ready' }, "*");
+}
+
+document.addEventListener('DOMContentLoaded', initLoaderUI);
 
 // ========== Particles (minimal) ==========
 function initParticles() {
@@ -270,10 +448,3 @@ function initParticles() {
     }
     draw();
 }
-
-window.onload = () => {
-    initParticles();
-    checkUpdates();
-    // Signal to the parent bootloader that the UI is ready
-    window.parent.postMessage({ type: 'ui_ready' }, "*");
-};

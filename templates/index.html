@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Night DLC | Главная</title>
+    <title>AwetosClient | Главная</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -20,7 +20,7 @@
 
     <nav class="nav-centered animate-fade">
         <div class="nav-container glass">
-            <a href="{{ url_for('index') }}" class="nav-logo">Night DLC</a>
+            <a href="{{ url_for('index') }}" class="nav-logo">AwetosClient</a>
             <div class="nav-items">
                 <a href="{{ url_for('index') }}" class="active"><i class="fas fa-home"></i> Главная</a>
                 <a href="{{ url_for('buy') }}"><i class="fas fa-shopping-bag"></i> Продукты</a>
@@ -28,8 +28,8 @@
                 <a href="{{ url_for('terms') }}"><i class="fas fa-gavel"></i> Условия использования</a>
             </div>
             <div class="nav-right">
-                <div class="nav-btn-icon"><i class="fas fa-moon"></i></div>
-                <div class="nav-btn-icon" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
+                <div class="nav-btn-icon" id="theme-btn"><i class="fas fa-moon"></i></div>
+                <div class="nav-btn-icon" id="lang-btn" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
                         class="fas fa-chevron-down" style="font-size: 0.5rem;"></i></div>
                 {% if is_logged_in %}
                 <a href="{{ url_for('information') }}" class="btn-profile glass"><i class="fas fa-user-circle"></i>
@@ -47,7 +47,7 @@
             <div class="badge"
                 style="display: inline-block; padding: 6px 16px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 100px; font-size: 0.7rem; font-weight: 800; color: var(--primary); margin-bottom: 20px;">
                 ✦ NEXT-GEN PROJECT</div>
-            <h1 style="font-size: 4.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">NIGHT DLC</h1>
+            <h1 style="font-size: 4.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">AWETOSCLIENT</h1>
             <p style="font-size: 1.1rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 40px;">Ультимативное
                 решение для вашей игры. Современный дизайн, безупречная производительность и лучшие функции на рынке.
             </p>
@@ -65,6 +65,7 @@
     </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
         // Smooth appearances
         document.addEventListener('DOMContentLoaded', () => {
