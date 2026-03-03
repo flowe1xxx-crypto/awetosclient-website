@@ -1,99 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AwetosClient | {{ 'Login' if mode == 'login' else 'Register' }}</title>
+    <title>Night DLC | Авторизация</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="loaded">
-    <canvas id="particles"></canvas>
+<body>
     <div class="bg-glow"></div>
+    <div class="bg-pills">
+        <div class="pill pill-1"></div>
+        <div class="pill pill-2"></div>
+        <div class="pill pill-3"></div>
+    </div>
+    <canvas id="particles"></canvas>
 
-    <nav>
-        <a href="{{ url_for('index') }}" class="logo">AwetosClient</a>
-        <div class="nav-right"></div>
-    </nav>
-
-    <div class="auth-container">
-        <div class="auth-wrapper animate-fade">
-            <!-- Branding Panel -->
-            <div class="auth-brand">
-                <h1>{{ 'Welcome back.' if mode == 'login' else 'Join the elite.' }}</h1>
-                <p>{{ 'Sign in to access your dashboard, manage your subscription, and download the latest version of
-                    AwetosClient.' if mode == 'login' else 'Create your account to get a free 7-day trial with full
-                    access
-                    to all modules and features.' }}</p>
-                <div style="margin-top: 2rem;">
-                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
-                        <i class="fas fa-check-circle" style="color: var(--primary);"></i>
-                        <span style="color: var(--text-dim); font-size: 0.9rem;">{{ 'Cloud synchronized configs' if mode
-                            == 'login' else '7-day free trial included' }}</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
-                        <i class="fas fa-check-circle" style="color: var(--primary);"></i>
-                        <span style="color: var(--text-dim); font-size: 0.9rem;">{{ 'Priority support access' if mode ==
-                            'login' else 'Access to 150+ modules' }}</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.8rem;">
-                        <i class="fas fa-check-circle" style="color: var(--primary);"></i>
-                        <span style="color: var(--text-dim); font-size: 0.9rem;">{{ 'HWID-locked security' if mode ==
-                            'login' else 'Instant HWID binding' }}</span>
-                    </div>
-                </div>
+    <nav class="nav-centered">
+        <div class="nav-container glass">
+            <a href="{{ url_for('index') }}" class="nav-logo">Night DLC</a>
+            <div class="nav-items">
+                <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Главная</a>
+                <a href="{{ url_for('buy') }}"><i class="fas fa-shopping-bag"></i> Продукты</a>
+                <a href="{{ url_for('privacy') }}"><i class="fas fa-book"></i> Политика конфиденциальности</a>
+                <a href="{{ url_for('terms') }}"><i class="fas fa-gavel"></i> Условия использования</a>
             </div>
-
-            <!-- Form Panel -->
-            <div class="auth-form-panel">
-                <h2>{{ 'Sign In' if mode == 'login' else 'Create Account' }}</h2>
-                <form action="{{ url_for('login' if mode == 'login' else 'register') }}" method="POST">
-                    {% if mode == 'register' %}
-                    <div class="form-group">
-                        <label><i class="fas fa-envelope"></i> Email</label>
-                        <input type="email" name="email" placeholder="name@example.com" required>
-                    </div>
-                    {% endif %}
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Username</label>
-                        <input type="text" name="username" placeholder="YourUsername" required>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> Password</label>
-                        <input type="password" name="password" placeholder="••••••••" required>
-                    </div>
-                    {% if mode == 'register' %}
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> Confirm Password</label>
-                        <input type="password" name="confirm_password" placeholder="••••••••" required>
-                    </div>
-                    {% endif %}
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-{{ 'arrow-right-to-bracket' if mode == 'login' else 'user-plus' }}"></i>
-                        {{ ' Sign In' if mode == 'login' else ' Register' }}
-                    </button>
-                </form>
-
-                <div class="auth-switch">
-                    {% if mode == 'login' %}
-                    Don't have an account? <a href="{{ url_for('register') }}">Register</a>
-                    {% else %}
-                    Already have an account? <a href="{{ url_for('login') }}">Login</a>
-                    {% endif %}
-                </div>
+            <div class="nav-right">
+                <div class="nav-btn-icon"><i class="fas fa-moon"></i></div>
+                <div class="nav-btn-icon" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
+                        class="fas fa-chevron-down" style="font-size: 0.5rem;"></i></div>
+                <a href="{{ url_for('login') }}" class="btn-login">Войти</a>
+                <a href="{{ url_for('register') }}" class="btn-register">Регистрация</a>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <div class="settings-panel">
-        <button id="theme-btn">🌙 Dark</button>
-        <button id="lang-btn">🇬🇧 EN</button>
-    </div>
+    <main class="auth-container">
+        <div class="auth-box glass animate-fade">
+            <div class="auth-tabs">
+                <div class="auth-tab {{ 'active' if mode == 'login' else '' }}"
+                    onclick="location.href='{{ url_for('login') }}'"><i class="fas fa-sign-in-alt"></i> Вход</div>
+                <div class="auth-tab {{ 'active' if mode == 'register' else '' }}"
+                    onclick="location.href='{{ url_for('register') }}'"><i class="fas fa-user-plus"></i> Регистрация
+                </div>
+            </div>
+
+            <form action="{{ url_for('login' if mode == 'login' else 'register') }}" method="POST">
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" name="username" placeholder="Введите email" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Пароль</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Введите пароль" required>
+                    </div>
+                </div>
+
+                <div class="auth-footer">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember">
+                        <label for="remember"
+                            style="font-size: 0.75rem; color: var(--text-dim); text-transform: none; font-weight: 500; cursor: pointer;">Запомнить
+                            меня</label>
+                    </div>
+                    <a href="#" class="auth-link">Забыли пароль?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i> {{ 'Войти' if mode == 'login' else 'Создать аккаунт' }}
+                </button>
+            </form>
+        </div>
+    </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>

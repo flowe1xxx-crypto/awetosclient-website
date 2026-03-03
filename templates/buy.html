@@ -1,122 +1,119 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AwetosClient | Premium Subscription</title>
+    <title>Night DLC | Продукты</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="loaded">
-    <canvas id="particles"></canvas>
+<body>
     <div class="bg-glow"></div>
+    <div class="bg-pills">
+        <div class="pill pill-1"></div>
+        <div class="pill pill-2"></div>
+        <div class="pill pill-3"></div>
+    </div>
+    <canvas id="particles"></canvas>
 
-    <nav class="nav-scrolled">
-        <a href="{{ url_for('index') }}" class="logo">AwetosClient</a>
-        <ul class="nav-links">
-            <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> <span data-i18n="nav_home">Home</span></a>
-            </li>
-            <li><a href="{{ url_for('buy') }}" style="color: var(--primary);"><i class="fas fa-tag"></i> <span
-                        data-i18n="nav_buy">Buy</span></a></li>
-            <li><a href="{{ url_for('information') }}"><i class="fas fa-user-shield"></i> <span
-                        data-i18n="nav_info">Information</span></a></li>
-        </ul>
-        <div class="hamburger">
-            <span></span><span></span><span></span>
-        </div>
-        <div class="nav-right">
-            <span class="profile-name">{{ session.user }}</span>
-            <a href="{{ url_for('logout') }}" class="btn-auth btn-auth-ghost" data-i18n="nav_logout">Logout</a>
+    <nav class="nav-centered">
+        <div class="nav-container glass">
+            <a href="{{ url_for('index') }}" class="nav-logo">Night DLC</a>
+            <div class="nav-items">
+                <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Главная</a>
+                <a href="{{ url_for('buy') }}" class="active"><i class="fas fa-shopping-bag"></i> Продукты</a>
+                <a href="{{ url_for('privacy') }}"><i class="fas fa-book"></i> Политика конфиденциальности</a>
+                <a href="{{ url_for('terms') }}"><i class="fas fa-gavel"></i> Условия использования</a>
+            </div>
+            <div class="nav-right">
+                <div class="nav-btn-icon"><i class="fas fa-moon"></i></div>
+                <div class="nav-btn-icon" style="font-size: 0.7rem; font-weight: 800; gap: 4px;">🇷🇺 RUS <i
+                        class="fas fa-chevron-down" style="font-size: 0.5rem;"></i></div>
+                {% if is_logged_in %}
+                <a href="{{ url_for('information') }}" class="btn-profile glass"><i class="fas fa-user-circle"></i>
+                    Профиль</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn-login">Войти</a>
+                <a href="{{ url_for('register') }}" class="btn-register">Регистрация</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 
-    <div class="hero" style="min-height: 100vh; height: auto; padding-top: 8rem;">
-        <div class="section-title animate-fade">
-            <h1 style="font-size: 3.5rem;">UPGRADE NOW</h1>
-            <p style="color: var(--text-dim);">Choose the plan that fits your domination style.</p>
+    <main class="content-container section-padding animate-fade" style="margin-top: 100px;">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 10px;">ПОЛУЧИТЬ ДОСТУП</h1>
+            <p style="color: var(--text-dim);">Выберите подходящий план для игры на новом уровне.</p>
         </div>
 
-        <div class="pricing-grid" style="max-width: 600px; width: 100%; margin: 0 auto;">
+        <div style="max-width: 500px; margin: 0 auto;">
             {% if request.args.get('generated_key') %}
-            <!-- Key Display -->
-            <div class="price-card popular scroll-reveal" style="padding: 3rem 2rem;">
-                <div class="popular-badge">SUCCESS</div>
-                <h4><i class="fas fa-key"></i> Your Trial Key</h4>
+            <!-- Success / Key Display -->
+            <div class="profile-card-main glass text-center" style="padding: 50px;">
+                <div
+                    style="width: 60px; height: 60px; background: rgba(0, 242, 254, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--accent); font-size: 1.5rem;">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 style="margin-bottom: 10px;">КЛЮЧ СОЗДАН</h2>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 30px;">Скопируйте ваш ключ и
+                    активируйте его в профиле.</p>
 
-                <div class="key-display"
-                    style="background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 12px; margin: 2rem 0; font-family: monospace; font-size: 1.4rem; color: var(--primary); letter-spacing: 2px;">
+                <div
+                    style="background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 20px; border-radius: 12px; margin-bottom: 30px; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; color: var(--primary); letter-spacing: 2px;">
                     {{ request.args.get('generated_key') }}
                 </div>
 
-                <p style="color: var(--text-dim); margin-bottom: 2rem; font-size: 0.9rem;">
-                    Copy this key and paste it in the <a href="{{ url_for('information') }}"
-                        style="color: var(--primary); text-decoration: none; font-weight: bold;">Information</a> tab to
-                    activate your 3-month subscription.
-                </p>
-
-                <button class="submit-btn" {% set gen_key=request.args.get('generated_key') %}
-                    onclick="navigator.clipboard.writeText('{{ gen_key }}'); this.innerHTML='<i class=\'fas fa-check\'></i> Copied!'; setTimeout(()=>this.innerHTML='<i class=\'fas fa-copy\'></i> Copy Key', 2000);">
-                    <i class="fas fa-copy"></i> Copy Key
+                <button class="btn-submit"
+                    onclick="navigator.clipboard.writeText('{{ request.args.get('generated_key') }}'); this.innerHTML='<i class=\'fas fa-check\'></i> Скопировано!';">
+                    <i class="fas fa-copy"></i> Копировать ключ
                 </button>
+                <a href="{{ url_for('information') }}"
+                    style="display: block; margin-top: 20px; font-size: 0.8rem; color: var(--primary); text-decoration: none;">Перейти
+                    к активации →</a>
             </div>
             {% else %}
-            <!-- Generate Key Card -->
-            <div class="price-card popular scroll-reveal" style="padding: 3rem 2rem;">
-                <div class="popular-badge">FREE</div>
-                <h4><i class="fas fa-gift"></i> 3 Months Access</h4>
-                <div class="price">$0<span>.00</span></div>
-                <ul class="price-features" style="text-align: left; max-width: 250px; margin: 0 auto 2rem;">
-                    <li><i class="fas fa-check"></i> Full Access to All Modules</li>
-                    <li><i class="fas fa-check"></i> Cloud Configs Included</li>
-                    <li><i class="fas fa-check"></i> Priority Ticket Support</li>
+            <!-- Product Card -->
+            <div class="profile-card-main glass" style="padding: 50px; position: relative; overflow: hidden;">
+                <div
+                    style="position: absolute; top: 15px; right: 15px; background: var(--primary); color: #fff; font-size: 0.6rem; font-weight: 900; padding: 4px 10px; border-radius: 100px;">
+                    FREE TRIAL</div>
+
+                <h2 style="font-size: 1.5rem; margin-bottom: 5px;">TRIAL ACCESS</h2>
+                <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 30px;">0.00 <span
+                        style="font-size: 1rem; color: var(--text-dim);">RUB</span></div>
+
+                <ul
+                    style="list-style: none; padding: 0; margin-bottom: 40px; display: flex; flex-direction: column; gap: 15px;">
+                    <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                            class="fas fa-check-circle" style="color: var(--accent);"></i> Полный доступ ко всем модулям
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                            class="fas fa-check-circle" style="color: var(--accent);"></i> Облачные конфиги</li>
+                    <li style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i
+                            class="fas fa-check-circle" style="color: var(--accent);"></i> Приоритетная поддержка</li>
                 </ul>
 
                 {% if is_logged_in %}
                 <form action="{{ url_for('generate_trial_key') }}" method="POST">
-                    <button type="submit" class="submit-btn" style="display: block; width: 100%;">
-                        <i class="fas fa-key"></i> Generate Trial Key
+                    <button type="submit" class="btn-submit" style="width: 100%;">
+                        <i class="fas fa-bolt"></i> Получить ключ на 3 мес.
                     </button>
                 </form>
                 {% else %}
-                <a href="{{ url_for('login') }}" class="submit-btn"
-                    style="text-decoration: none; display: block; text-align: center;">
-                    <i class="fas fa-sign-in-alt"></i> Login to Generate
+                <a href="{{ url_for('login') }}" class="btn-submit" style="text-decoration: none;">
+                    <i class="fas fa-sign-in-alt"></i> Войдите для получения
                 </a>
-                <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-dim);">You must be logged in to
-                    generate a key.</p>
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-dim);">Требуется
+                    авторизация</p>
                 {% endif %}
             </div>
             {% endif %}
         </div>
-
-        <!-- Telegram Link -->
-        <div class="scroll-reveal" style="text-align: center; margin-top: 4rem;">
-            <p style="color: var(--text-dim); margin-bottom: 1rem;">Ready to play? Download our modern loader:</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="#loader-download-link-placeholder" class="btn-main" style="padding: 0.8rem 2rem;">
-                    <i class="fas fa-download"></i> Download Loader (.exe)
-                </a>
-                <a href="https://t.me/awetosclient" target="_blank" class="btn-secondary"
-                    style="display: inline-flex; align-items: center; gap: 0.5rem; border-color: #0088cc; color: #0088cc;">
-                    <i class="fab fa-telegram-plane" style="font-size: 1.2rem;"></i> Join Telegram
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 AwetosClient Project. Premium Hardware ID Locking System Active.</p>
-    </footer>
-
-    <div class="settings-panel">
-        <button id="theme-btn">🌙 Dark</button>
-        <button id="lang-btn">🇬🇧 EN</button>
-    </div>
+    </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>

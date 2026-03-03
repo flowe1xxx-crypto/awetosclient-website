@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Условия использования | Night DLC</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="legal-page">
+    <div class="bg-glow"></div>
+    <canvas id="particles"></canvas>
+
+    <nav class="nav-centered">
+        <div class="nav-container glass">
+            <a href="{{ url_for('index') }}" class="nav-logo">Night DLC</a>
+            <div class="nav-items">
+                <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Главная</a>
+                <a href="{{ url_for('buy') }}"><i class="fas fa-shopping-bag"></i> Продукты</a>
+                <a href="{{ url_for('privacy') }}"><i class="fas fa-book"></i> Политика конфиденциальности</a>
+                <a href="{{ url_for('terms') }}" class="active"><i class="fas fa-gavel"></i> Условия использования</a>
+            </div>
+            <div class="nav-right">
+                {% if is_logged_in %}
+                <a href="{{ url_for('information') }}" class="btn-profile glass"><i class="fas fa-user-circle"></i>
+                    Профиль</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn-login">Войти</a>
+                <a href="{{ url_for('register') }}" class="btn-register">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-container section-padding">
+        <div class="legal-card glass">
+            <h1>Условия использования</h1>
+            <p class="last-updated">Последнее обновление: 3 марта 2026 г.</p>
+
+            <section>
+                <h2>1. Согласие с условиями</h2>
+                <p>Используя Night DLC, вы соглашаетесь соблюдать эти условия. Если вы не согласны, пожалуйста,
+                    прекратите использование продукта.</p>
+            </section>
+
+            <section>
+                <h2>2. Лицензия</h2>
+                <p>Мы предоставляем вам ограниченную, непередаваемую лицензию на использование программного обеспечения
+                    исключительно в личных целях.</p>
+            </section>
+
+            <section>
+                <h2>3. Ограничения</h2>
+                <p>Запрещается: реверс-инжиниринг, перепродажа лицензий, передача учетной записи третьим лицам или
+                    использование продукта для нарушения правил сторонних сервисов.</p>
+            </section>
+
+            <section>
+                <h2>4. Отказ от ответственности</h2>
+                <p>Программное обеспечение предоставляется «как есть». Мы не несем ответственности за последствия
+                    использования продукта, включая блокировки в играх.</p>
+            </section>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+</body>
+
+</html>

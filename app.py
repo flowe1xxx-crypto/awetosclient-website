@@ -213,6 +213,14 @@ def information():
         print(f"Information route error: {e}")
         return redirect(url_for('index'))
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
 @app.route('/loader')
 def loader_ui():
     # Only allow access if it looks like it's coming from the loader app
