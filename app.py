@@ -51,6 +51,38 @@ def login():
             return redirect(url_for('index'))
     return render_template('auth.html', mode='login')
 
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    if not data:
+        return {"success": False, "message": "No data received"}, 400
+        
+    username = data.get('username')
+    password = data.get('password')
+    
+    try:
+        response = supabase.table('users').select('*').eq('username', username).execute()
+        user = response.data[0] if response.data else None
+        
+        if user and user['password'] == password:
+            # Check subscription status
+            expiry = datetime.strptime(user['expiry_date'], "%Y-%m-%d %H:%M")
+            is_subscribed = expiry > datetime.now()
+            
+            # Prepare data and match what loader expects
+            res_data = {
+                "username": user['username'],
+                "uid": user['uid'],
+                "expiry_date": user['expiry_date'],
+                "subscription": "VIP" if is_subscribed else "EXPIRED"
+            }
+            return {"success": True, "user": res_data}
+        else:
+            return {"success": False, "message": "Invalid credentials"}
+    except Exception as e:
+        print(f"API Login error: {e}")
+        return {"success": False, "message": "Database error"}, 500
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
