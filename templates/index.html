@@ -22,6 +22,12 @@
             <div class="orb orb-2"></div>
             <div class="orb orb-3"></div>
         </div>
+        <!-- Neon Lines -->
+        <div class="neon-lines">
+            <div class="neon-line line-1"></div>
+            <div class="neon-line line-2"></div>
+            <div class="neon-line line-3"></div>
+        </div>
     </div>
     <canvas id="particles"></canvas>
 
@@ -264,6 +270,79 @@
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Smooth appearances and scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-fade');
+            elements.forEach((el, i) => {
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.style.animation = `fadeIn 0.8s var(--transition) forwards`;
+                }, i * 150);
+            });
+
+            // Intersection Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe all cards and sections
+            document.querySelectorAll('.feature-card, .module-category, .stat-card, .support, .features').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Counter animation for stats
+            const animateCounters = () => {
+                const counters = document.querySelectorAll('.stat-number');
+                counters.forEach(counter => {
+                    const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
+                    const increment = target / 100;
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        if (current < target) {
+                            current += increment;
+                            if (counter.textContent.includes('+')) {
+                                counter.textContent = Math.ceil(current).toLocaleString() + '+';
+                            } else if (counter.textContent.includes('%')) {
+                                counter.textContent = Math.ceil(current) + '%';
+                            } else if (counter.textContent.includes('/')) {
+                                counter.textContent = Math.ceil(current) + '/7';
+                            } else {
+                                counter.textContent = Math.ceil(current).toLocaleString();
+                            }
+                            requestAnimationFrame(updateCounter);
+                        }
+                    };
+                    
+                    updateCounter();
+                });
+            };
+
+            // Trigger counter animation when stats section is visible
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            });
+
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+        });
+    </script>
 </body>
 
 </html>

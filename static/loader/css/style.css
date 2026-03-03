@@ -1,25 +1,45 @@
 /* ==========================================
    Aurora Glass — AwetosClient Premium Theme
+   Ultra Modern Neon Redesign
    ========================================== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
+    /* Neon Colors */
     --primary: #a855f7;
-    --primary-glow: rgba(168, 85, 247, 0.5);
+    --primary-dark: #7c3aed;
+    --primary-light: #c084fc;
+    --primary-glow: rgba(168, 85, 247, 0.6);
     --primary-soft: rgba(168, 85, 247, 0.1);
     --accent: #22d3ee;
-    --accent-glow: rgba(34, 211, 238, 0.4);
-    --bg-dark: #0a0a1a;
-    --bg-card: rgba(15, 15, 35, 0.7);
-    --bg-card-hover: rgba(168, 85, 247, 0.05);
+    --accent-dark: #06b6d4;
+    --accent-glow: rgba(34, 211, 238, 0.5);
+    --accent-pink: #ec4899;
+    --accent-pink-glow: rgba(236, 72, 153, 0.5);
+    
+    /* Background Colors */
+    --bg-dark: #030712;
+    --bg-card: rgba(10, 10, 20, 0.75);
+    --bg-card-hover: rgba(168, 85, 247, 0.08);
+    
+    /* Text Colors */
     --text: #FFFFFF;
     --text-dim: #8b8ba3;
     --text-muted: #4a4a6a;
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shine: rgba(255, 255, 255, 0.12);
+    
+    /* Glass Effects */
+    --glass-border: rgba(168, 85, 247, 0.15);
+    --glass-shine: rgba(255, 255, 255, 0.1);
+    
+    /* Status Colors */
     --success: #34d399;
     --danger: #f87171;
     --warning: #fbbf24;
+    
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(168, 85, 247, 0.4);
+    --glow-secondary: 0 0 20px rgba(34, 211, 238, 0.4);
+    --glow-pink: 0 0 20px rgba(236, 72, 153, 0.4);
 }
 
 * {
