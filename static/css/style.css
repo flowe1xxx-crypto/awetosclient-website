@@ -1,22 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 /* ==========================================
-   THEME SYSTEM — 3 palettes via CSS vars
+   THEME SYSTEM — Aurora Glass
    ========================================== */
 :root,
 [data-theme="dark"] {
-    --primary: #FF6539;
-    --primary-glow: rgba(255, 101, 57, 0.4);
-    --primary-soft: rgba(255, 101, 57, 0.08);
-    --bg-dark: #060611;
+    --primary: #a855f7;
+    --primary-glow: rgba(168, 85, 247, 0.4);
+    --primary-soft: rgba(168, 85, 247, 0.08);
+    --accent: #22d3ee;
+    --accent-glow: rgba(34, 211, 238, 0.3);
+    --bg-dark: #0a0a1a;
     --bg-card: rgba(255, 255, 255, 0.04);
     --bg-card-hover: rgba(255, 255, 255, 0.08);
     --text: #FFFFFF;
     --text-dim: rgba(255, 255, 255, 0.55);
     --glass-border: rgba(255, 255, 255, 0.08);
-    --gradient-hero: linear-gradient(135deg, #0a0a1a 0%, #0d0d20 50%, #120a08 100%);
-    --glow-1: radial-gradient(circle at 80% 20%, rgba(255, 101, 57, 0.08) 0%, transparent 50%);
-    --glow-2: radial-gradient(circle at 20% 80%, rgba(100, 80, 255, 0.06) 0%, transparent 50%);
+    --gradient-hero: linear-gradient(135deg, #0a0a1a 0%, #0d0d20 50%, #0a0518 100%);
+    --glow-1: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+    --glow-2: radial-gradient(circle at 20% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 50%);
 }
 
 [data-theme="neon"] {
