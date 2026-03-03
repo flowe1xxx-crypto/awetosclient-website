@@ -38,16 +38,17 @@
     </nav>
 
     <main class="auth-container">
-        <div class="auth-box glass animate-fade">
+        <div class="auth-card glass animate-fade">
             <div class="auth-tabs">
-                <div class="auth-tab {{ 'active' if mode == 'login' else '' }}"
-                    onclick="location.href='{{ url_for('login') }}'"><i class="fas fa-sign-in-alt"></i> Вход</div>
-                <div class="auth-tab {{ 'active' if mode == 'register' else '' }}"
-                    onclick="location.href='{{ url_for('register') }}'"><i class="fas fa-user-plus"></i> Регистрация
-                </div>
+                <button class="auth-tab {{ 'active' if mode == 'login' else '' }}" onclick="location.href='{{ url_for('login') }}'">
+                    <i class="fas fa-right-to-bracket"></i> Вход
+                </button>
+                <button class="auth-tab {{ 'active' if mode == 'register' else '' }}" onclick="location.href='{{ url_for('register') }}'">
+                    <i class="fas fa-user-plus"></i> Регистрация
+                </button>
             </div>
 
-            <form action="{{ url_for('login' if mode == 'login' else 'register') }}" method="POST">
+            <form action="{{ url_for('login' if mode == 'login' else 'register') }}" method="POST" class="auth-form">
                 <div class="input-group">
                     <label>Email</label>
                     <div class="input-wrapper">
@@ -65,17 +66,15 @@
                 </div>
 
                 <div class="auth-footer">
-                    <div class="checkbox-group">
+                    <label class="remember-box">
                         <input type="checkbox" id="remember">
-                        <label for="remember"
-                            style="font-size: 0.75rem; color: var(--text-dim); text-transform: none; font-weight: 500; cursor: pointer;">Запомнить
-                            меня</label>
-                    </div>
+                        <span>Запомнить меня</span>
+                    </label>
                     <a href="#" class="auth-link">Забыли пароль?</a>
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <i class="fas fa-sign-in-alt"></i> {{ 'Войти' if mode == 'login' else 'Создать аккаунт' }}
+                    <i class="fas fa-bolt"></i> {{ 'Войти' if mode == 'login' else 'Создать аккаунт' }}
                 </button>
             </form>
         </div>

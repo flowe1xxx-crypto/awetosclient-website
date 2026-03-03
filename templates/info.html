@@ -37,56 +37,63 @@
         </div>
     </nav>
 
-    <main class="profile-container animate-fade">
-        <!-- Sidebar Navigation -->
-        <aside class="profile-card-main glass">
-            <div class="user-header">
+    <main class="account-layout animate-fade">
+        <aside class="account-card glass">
+            <div class="account-user">
                 <div class="avatar-large">{{ user.username[0].upper() }}</div>
-                <div class="user-name">
-                    <h2>{{ user.username }} <span style="font-size: 0.7rem; color: var(--text-dim);">({{ user.uid
-                            }})</span></h2>
-                    <p>Подписка до: {{ user.expiry_date if user.expiry_date else 'None' }}</p>
+                <div class="user-meta">
+                    <div class="user-title">{{ user.username }}</div>
+                    <div class="user-sub">UID {{ user.uid }}</div>
                 </div>
-                <a href="{{ url_for('logout') }}"
-                    style="margin-left: auto; color: var(--text-dim); transition: 0.3s;"><i
-                        class="fas fa-sign-out-alt"></i></a>
+                <a href="{{ url_for('logout') }}" class="icon-link"><i class="fas fa-arrow-right-from-bracket"></i></a>
             </div>
 
-            <div class="profile-nav">
-                <a href="#" class="p-nav-item active"><i class="fas fa-user"></i> Аккаунт</a>
-                <a href="#" class="p-nav-item"><i class="fas fa-cog"></i> Настройки</a>
-                <a href="#" class="p-nav-item"><i class="fas fa-rocket"></i> Лаунчер</a>
+            <div class="account-status">
+                <div class="status-row">
+                    <span>Подписка</span>
+                    <strong>{{ user.expiry_date if user.expiry_date else 'None' }}</strong>
+                </div>
+                <div class="status-row">
+                    <span>HWID</span>
+                    <strong>{{ user.hwid if user.hwid else 'Не привязан' }}</strong>
+                </div>
             </div>
 
-            <a href="https://t.me/awetosclient" target="_blank" class="btn-register"
-                style="margin-top: 30px; width: 100%; justify-content: center; background: rgba(79, 172, 254, 0.15); border: 1px solid var(--primary); box-shadow: none;">
+            <a href="https://t.me/awetosclient" target="_blank" class="btn-pill">
                 <i class="fas fa-headset"></i> Тикеты
             </a>
         </aside>
 
-        <!-- Main Content -->
-        <div class="profile-content">
-            <div class="info-grid">
-                <div class="info-card glass">
-                    <label><i class="fas fa-envelope"></i> Email</label>
-                    <div class="val">{{ user.username if '@' in user.username else user.username + '@gmail.com' }}</div>
+        <section class="account-panel glass">
+            <div class="panel-tabs">
+                <button class="panel-tab active"><i class="fas fa-user"></i> Аккаунт</button>
+                <button class="panel-tab"><i class="fas fa-gear"></i> Настройки</button>
+                <button class="panel-tab"><i class="fas fa-rocket"></i> Лаунчер</button>
+            </div>
+
+            <div class="panel-grid">
+                <div class="panel-card">
+                    <div class="card-label">Email</div>
+                    <div class="card-value">{{ user.username if '@' in user.username else user.username + '@gmail.com' }}</div>
                 </div>
-                <div class="info-card glass">
-                    <label><i class="fas fa-calendar"></i> Регистрация</label>
-                    <div class="val">{{ user.registered_at if user.registered_at else '03.03.2026' }}</div>
+                <div class="panel-card">
+                    <div class="card-label">Регистрация</div>
+                    <div class="card-value">{{ user.registered_at if user.registered_at else '03.03.2026' }}</div>
                 </div>
-                <div class="info-card glass">
-                    <label><i class="fas fa-fingerprint"></i> HWID</label>
-                    <div class="val">{{ user.hwid if user.hwid else 'Не привязан' }}</div>
+                <div class="panel-card">
+                    <div class="card-label">HWID</div>
+                    <div class="card-value">{{ user.hwid if user.hwid else 'Не привязан' }}</div>
                 </div>
             </div>
 
-            <div class="activate-box glass">
-                <i class="fas fa-key" style="color: var(--text-dim);"></i>
-                <input type="text" class="activate-input" placeholder="Введите лицензионный ключ...">
-                <button class="btn-register"><i class="fas fa-check"></i> Активировать</button>
+            <div class="license-box">
+                <div class="license-input">
+                    <i class="fas fa-key"></i>
+                    <input type="text" placeholder="Введите лицензионный ключ...">
+                </div>
+                <button class="btn-primary"><i class="fas fa-check"></i> Активировать</button>
             </div>
-        </div>
+        </section>
     </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
