@@ -2255,3 +2255,47 @@ body {
         padding: 30px 20px;
     }
 }
+
+/* Tab Content Styles */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Password Change Form Styles */
+#change-password-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Settings Tab Specific Styles */
+.tab-content[data-tab="settings"] h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tab-content[data-tab="settings"] .input-field {
+    margin-bottom: 0;
+}
+
+/* Launcher Tab Specific Styles */
+.tab-content[data-tab="launcher"] ul,
+.tab-content[data-tab="launcher"] ol {
+    margin: 0;
+}
+
+.tab-content[data-tab="launcher"] li {
+    margin-bottom: 8px;
+}
+
+/* Responsive adjustments for tab content */
+@media (max-width: 768px) {
+    .tab-content[data-tab="launcher"] .panel-grid {
+        grid-template-columns: 1fr;
+    }
+}

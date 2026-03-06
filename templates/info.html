@@ -66,37 +66,155 @@
 
         <section class="account-panel glass">
             <div class="panel-tabs">
-                <button class="panel-tab active"><i class="fas fa-user"></i> Аккаунт</button>
-                <button class="panel-tab"><i class="fas fa-gear"></i> Настройки</button>
-                <button class="panel-tab"><i class="fas fa-rocket"></i> Лаунчер</button>
+                <button class="panel-tab active" data-tab="account"><i class="fas fa-user"></i> Аккаунт</button>
+                <button class="panel-tab" data-tab="settings"><i class="fas fa-gear"></i> Настройки</button>
+                <button class="panel-tab" data-tab="launcher"><i class="fas fa-rocket"></i> Лаунчер</button>
             </div>
 
-            <div class="panel-grid">
-                <div class="panel-card">
-                    <div class="card-label">Email</div>
-                    <div class="card-value">{{ user.username if '@' in user.username else user.username + '@gmail.com' }}</div>
+            <!-- Аккаунт Tab Content -->
+            <div class="tab-content active" data-tab="account">
+                <div class="panel-grid">
+                    <div class="panel-card">
+                        <div class="card-label">Email</div>
+                        <div class="card-value">{{ user.username if '@' in user.username else user.username + '@gmail.com' }}</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">Регистрация</div>
+                        <div class="card-value">{{ user.registered_at if user.registered_at else '03.03.2026' }}</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">HWID</div>
+                        <div class="card-value">{{ user.hwid if user.hwid else 'Не привязан' }}</div>
+                    </div>
                 </div>
-                <div class="panel-card">
-                    <div class="card-label">Регистрация</div>
-                    <div class="card-value">{{ user.registered_at if user.registered_at else '03.03.2026' }}</div>
-                </div>
-                <div class="panel-card">
-                    <div class="card-label">HWID</div>
-                    <div class="card-value">{{ user.hwid if user.hwid else 'Не привязан' }}</div>
+
+                <div class="license-box">
+                    <div class="license-input">
+                        <i class="fas fa-key"></i>
+                        <input type="text" placeholder="Введите лицензионный ключ...">
+                    </div>
+                    <button class="btn-primary"><i class="fas fa-check"></i> Активировать</button>
                 </div>
             </div>
 
-            <div class="license-box">
-                <div class="license-input">
-                    <i class="fas fa-key"></i>
-                    <input type="text" placeholder="Введите лицензионный ключ...">
+            <!-- Настройки Tab Content -->
+            <div class="tab-content" data-tab="settings">
+                <div class="panel-grid">
+                    <div class="panel-card">
+                        <div class="card-label">Подписка до</div>
+                        <div class="card-value">{{ user.expiry_date if user.expiry_date else 'Не активна' }}</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">Последний вход</div>
+                        <div class="card-value">{{ user.last_login if user.last_login else 'Неизвестно' }}</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">HWID</div>
+                        <div class="card-value">{{ user.hwid if user.hwid else 'Не привязан' }}</div>
+                    </div>
                 </div>
-                <button class="btn-primary"><i class="fas fa-check"></i> Активировать</button>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 20px;">
+                        <i class="fas fa-lock"></i> Изменить пароль
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Текущий пароль" id="current-password">
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-key"></i>
+                            <input type="password" placeholder="Новый пароль" id="new-password">
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-key"></i>
+                            <input type="password" placeholder="Подтвердите новый пароль" id="confirm-password">
+                        </div>
+                        <button class="btn-primary" id="change-password-btn">
+                            <i class="fas fa-check"></i> Изменить пароль
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 20px;">
+                        <i class="fas fa-key"></i> Активация ключа
+                    </h3>
+                    <div class="license-box">
+                        <div class="license-input">
+                            <i class="fas fa-key"></i>
+                            <input type="text" placeholder="Введите ключ активации..." id="settings-key-input">
+                        </div>
+                        <button class="btn-primary" id="settings-activate-btn">
+                            <i class="fas fa-check"></i> Активировать
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Лаунчер Tab Content -->
+            <div class="tab-content" data-tab="launcher">
+                <div style="text-align: center; padding: 40px 0;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);">
+                        <i class="fas fa-rocket" style="font-size: 3rem; color: white;"></i>
+                    </div>
+                    <h3 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 15px;">
+                        AwetosClient Launcher
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        Скачайте официальный лаунчер для удобного запуска и обновления клиента
+                    </p>
+                    <a href="#" class="btn-hero-primary" style="display: inline-flex; text-decoration: none;">
+                        <i class="fas fa-download"></i> Скачать Launcher v1.0.0
+                    </a>
+                </div>
+
+                <div class="panel-grid" style="margin-top: 40px;">
+                    <div class="panel-card">
+                        <div class="card-label">Версия</div>
+                        <div class="card-value">1.0.0</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">Размер</div>
+                        <div class="card-value">~15 MB</div>
+                    </div>
+                    <div class="panel-card">
+                        <div class="card-label">Платформа</div>
+                        <div class="card-value">Windows 10/11</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-light); border-radius: 16px; padding: 30px;">
+                    <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 15px;">
+                        <i class="fas fa-info-circle"></i> Системные требования
+                    </h4>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+                        <li>Windows 10 или выше (64-bit)</li>
+                        <li>4 GB RAM (рекомендуется 8 GB)</li>
+                        <li>Java 17 или выше</li>
+                        <li>Интернет-соединение для активации</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 30px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-light); border-radius: 16px; padding: 30px;">
+                    <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 15px;">
+                        <i class="fas fa-book"></i> Инструкция по установке
+                    </h4>
+                    <ol style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+                        <li>Скачайте лаунчер по кнопке выше</li>
+                        <li>Запустите установочный файл</li>
+                        <li>Следуйте инструкциям мастера установки</li>
+                        <li>Войдите в свой аккаунт</li>
+                        <li>Нажмите "Играть" для запуска клиента</li>
+                    </ol>
+                </div>
             </div>
         </section>
     </main>
 
     <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/info.js') }}"></script>
 </body>
 
 </html>
