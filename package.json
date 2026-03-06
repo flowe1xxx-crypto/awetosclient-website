@@ -1,0 +1,30 @@
+{
+  "name": "awetos-server",
+  "version": "1.0.0",
+  "description": "Awetos Client - Full Server (Validation + Cloud Configs + IRC)",
+  "main": "server-full.js",
+  "scripts": {
+    "start": "node server-full.js",
+    "dev": "nodemon server-full.js",
+    "test": "node test-server.js"
+  },
+  "keywords": [
+    "minecraft",
+    "client",
+    "websocket",
+    "irc",
+    "cloud-configs"
+  ],
+  "author": "Awetos Team",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.2",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

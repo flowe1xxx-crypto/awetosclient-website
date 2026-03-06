@@ -1,0 +1,113 @@
+═══════════════════════════════════════════════════════════════
+                    ШПАРГАЛКА ПО СЕРВЕРУ
+═══════════════════════════════════════════════════════════════
+
+🚀 ЗАПУСК СЕРВЕРА:
+
+  Локально:
+    cd website
+    npm install
+    npm start
+
+  Продакшн (PM2):
+    chmod +x deploy.sh
+    ./deploy.sh
+
+  Heroku:
+    git push heroku main
+
+═══════════════════════════════════════════════════════════════
+
+📊 УПРАВЛЕНИЕ (PM2):
+
+  pm2 start server-full.js --name awetos-server
+  pm2 stop awetos-server
+  pm2 restart awetos-server
+  pm2 logs awetos-server
+  pm2 status
+  pm2 save
+  pm2 startup
+
+═══════════════════════════════════════════════════════════════
+
+🧪 ТЕСТИРОВАНИЕ:
+
+  Все тесты:
+    npm test
+
+  Cloud Configs:
+    wscat -c ws://localhost:3000/ws/configs
+    {"action":"list","uuid":"test"}
+
+  IRC:
+    wscat -c ws://localhost:3000/ws/irc
+    {"type":"register","clientId":"test"}
+    {"type":"message","message":"Hi!"}
+
+═══════════════════════════════════════════════════════════════
+
+🗄️ БАЗА ДАННЫХ:
+
+  Подключение:
+    psql "postgresql://neondb_owner:npg_nPf2qM7UmQZz@ep-damp-snow-aijkrdwe-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require"
+
+  Таблицы:
+    \dt
+
+  Конфиги:
+    SELECT * FROM cloud_configs;
+
+  IRC сообщения:
+    SELECT * FROM irc_messages ORDER BY timestamp DESC LIMIT 20;
+
+  HWID whitelist:
+    SELECT * FROM hwid_whitelist;
+
+═══════════════════════════════════════════════════════════════
+
+🔧 НАСТРОЙКА КЛИЕНТА:
+
+  1. Rich.java (строка 241):
+     new URI("ws://ваш-домен.com/ws/configs")
+
+  2. IRCManager.java (строка 42):
+     new URI("ws://ваш-домен.com/ws/irc")
+
+  3. Пересборка:
+     ./gradlew build
+
+═══════════════════════════════════════════════════════════════
+
+📡 ENDPOINTS:
+
+  HTTP:
+    POST /api/validate
+
+  WebSocket:
+    ws://домен/ws/configs
+    ws://домен/ws/irc
+
+═══════════════════════════════════════════════════════════════
+
+🔐 АДМИНЫ IRC:
+
+  В server-full.js:
+    const adminUsers = new Set(['1', '2', '3']);
+
+═══════════════════════════════════════════════════════════════
+
+📝 ПРОТОКОЛЫ:
+
+  Cloud Configs:
+    list:   {"action":"list","uuid":"uid"}
+    get:    {"action":"get","uuid":"uid","configName":"12345678"}
+    save:   {"action":"save","uuid":"uid","configName":"12345678","configData":{...}}
+    delete: {"action":"delete","uuid":"uid","configName":"12345678"}
+
+  IRC:
+    register: {"type":"register","clientId":"uid"}
+    message:  {"type":"message","message":"text","prefix":"[VIP]"}
+    mute:     {"type":"mute","targetId":"uid"}
+    unmute:   {"type":"unmute","targetId":"uid"}
+
+═══════════════════════════════════════════════════════════════

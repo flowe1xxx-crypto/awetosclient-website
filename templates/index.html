@@ -46,6 +46,10 @@
                     <i class="fas fa-home"></i>
                     <span>Главная</span>
                 </a>
+                <a href="{{ url_for('chat') }}" class="nav-link">
+                    <i class="fas fa-comments"></i>
+                    <span>IRC Chat</span>
+                </a>
                 <a href="{{ url_for('buy') }}" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Купить</span>
@@ -172,57 +176,341 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2>Возможности клиента</h2>
-                <p>Все что нужно для доминирования в Minecraft</p>
+                <div class="section-badge">
+                    <span class="badge-pulse"></span>
+                    <i class="fas fa-star"></i>
+                    <span>ВОЗМОЖНОСТИ</span>
+                </div>
+                <h2>Все что нужно для доминирования</h2>
+                <p>Самый мощный набор модулей для Minecraft с продвинутыми алгоритмами обхода античитов</p>
             </div>
 
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card combat">
                     <div class="feature-icon">
                         <i class="fas fa-crosshairs"></i>
+                        <div class="icon-glow"></div>
                     </div>
-                    <h3>Kill Aura</h3>
-                    <p>5 режимов ротации, настраиваемая дистанция, обход античита</p>
+                    <div class="feature-badge">COMBAT</div>
+                    <h3>Kill Aura Pro</h3>
+                    <p>5 режимов ротации, настраиваемая дистанция, обход всех античитов</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-bolt"></i> 20 CPS</span>
+                        <span><i class="fas fa-target"></i> 6 блоков</span>
+                    </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card visual">
                     <div class="feature-icon">
                         <i class="fas fa-eye"></i>
+                        <div class="icon-glow"></div>
                     </div>
+                    <div class="feature-badge">VISUAL</div>
                     <h3>ESP & Wallhack</h3>
-                    <p>Видите игроков, предметы и мобов сквозь стены</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-plane"></i>
+                    <p>Видите игроков, предметы и мобов сквозь стены с настраиваемыми цветами</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-palette"></i> RGB</span>
+                        <span><i class="fas fa-cube"></i> 3D Box</span>
                     </div>
-                    <h3>Fly & Speed</h3>
-                    <p>Летайте и бегайте быстрее с обходом античита</p>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card movement">
                     <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="feature-badge">MOVEMENT</div>
+                    <h3>Fly & Speed</h3>
+                    <p>Летайте и бегайте быстрее с продвинутым обходом античита</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-tachometer-alt"></i> 10x</span>
+                        <span><i class="fas fa-shield-alt"></i> Bypass</span>
+                    </div>
+                </div>
+
+                <div class="feature-card security">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-virus"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+<div class="feature-badge">SECURITY</div>
+                    <h3>Надежная защита</h3>
+                    <p>Современные технологии безопасности для максимальной защиты</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-lock"></i> AES-256</span>
+                        <span><i class="fas fa-code"></i> Native</span>
+                    </div>
+                </div>
+
+                <div class="feature-card modules">
+                    <div class="feature-icon">
+                        <i class="fas fa-cubes"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="feature-badge">MODULES</div>
+                    <h3>150+ модулей</h3>
+                    <p>Полный набор читов для любых ситуаций и серверов</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-cogs"></i> 150+</span>
+                        <span><i class="fas fa-server"></i> All Servers</span>
+                    </div>
+                </div>
+
+                <div class="feature-card interface">
+                    <div class="feature-icon">
+                        <i class="fas fa-desktop"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="feature-badge">INTERFACE</div>
+                    <h3>Современный UI</h3>
+                    <p>Красивый интерфейс с анимациями, темами и настройками</p>
+                    <div class="feature-stats">
+                        <span><i class="fas fa-paint-brush"></i> Themes</span>
+                        <span><i class="fas fa-magic"></i> Animations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Showcase Section -->
+    <section class="modules-showcase">
+        <div class="container">
+            <div class="section-header">
+                <h2>Категории модулей</h2>
+                <p>Изучите все доступные модули по категориям</p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon combat">
+                            <i class="fas fa-sword"></i>
+                        </div>
+                        <h3>Combat</h3>
+                        <span class="module-count">25 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>Kill Aura</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Velocity</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Criticals</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Auto Clicker</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Reach</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon movement">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3>Movement</h3>
+                        <span class="module-count">20 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>Fly</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Speed</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Jesus</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Spider</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>No Fall</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon render">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>Render</h3>
+                        <span class="module-count">30 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>ESP</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Tracers</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Fullbright</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>X-Ray</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Freecam</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon misc">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>Misc</h3>
+                        <span class="module-count">35 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>Auto Sell</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Chest Stealer</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Auto Totem</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Timer</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Nuker</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon world">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>World</h3>
+                        <span class="module-count">25 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>Scaffold</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Tower</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Breaker</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Auto Farm</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Auto Build</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-category">
+                    <div class="category-header">
+                        <div class="category-icon player">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Player</h3>
+                        <span class="module-count">15 модулей</span>
+                    </div>
+                    <div class="module-list">
+                        <div class="module-item">
+                            <span>Auto Armor</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Auto Eat</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Inventory Move</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>No Rotate</span>
+                            <div class="module-status active"></div>
+                        </div>
+                        <div class="module-item">
+                            <span>Blink</span>
+                            <div class="module-status active"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" data-target="15000">0</div>
+                    <div class="stat-label">Активных пользователей</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Поддерживаемых серверов</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>Безопасность</h3>
-                    <p>Надежная защита ваших данных</p>
+                    <div class="stat-number" data-target="99">0</div>
+                    <div class="stat-label">% Обхода античитов</div>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-cog"></i>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <h3>150+ модулей</h3>
-                    <p>Полный набор читов для любых ситуаций</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Современный UI</h3>
-                    <p>Красивый интерфейс с анимациями и темами</p>
+                    <div class="stat-number" data-target="24">0</div>
+                    <div class="stat-label">Часа поддержки</div>
                 </div>
             </div>
         </div>

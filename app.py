@@ -260,6 +260,10 @@ def privacy():
 def terms():
     return render_template('terms.html')
 
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
 @app.route('/loader')
 def loader_ui():
     # Only allow access if it looks like it's coming from the loader app
